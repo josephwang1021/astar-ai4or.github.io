@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Side-by-Side Equal Height Demo</title>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
+      padding: 20px;
+      box-sizing: border-box;
+      background-color: #f0f0f0;
+    }
+
+    .container {
+      display: flex;
+      width: 100%;
+      max-width: 1200px;
+      height: 100%;
+      gap: 20px;
+    }
+
+    .left-panel, .right-panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: white;
+      padding: 20px;
+      box-sizing: border-box;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    /* Left panel input + output stacked equally */
+    .left-panel .boxes {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      gap: 10px;
+    }
+
+    input, #chatInput, textarea {
+      font-size: 16px;
+      padding: 8px;
+      box-sizing: border-box;
+      width: 100%;
+    }
+
+    .left-panel input, .left-panel textarea {
+      flex: 1; /* make input & output equal height */
+    }
+
+    button {
+      padding: 8px 16px;
+      font-size: 16px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+
+    #chatBox {
+      flex: 1;
+      border: 1px solid black;
+      overflow-y: auto;
+      padding: 10px;
+      background-color: #f9f9f9;
+      border-radius: 4px;
+      margin-bottom: 10px;
+    }
+
+    .chat-message {
+      margin-bottom: 8px;
+      padding: 6px 10px;
+      border-radius: 8px;
+    }
+
+    .chat-message.user {
+      background-color: #d0e7ff;
+      align-self: flex-end;
+    }
+
+    .chat-message.bot {
+      background-color: #d0ffd8;
+      align-self: flex-start;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Left Panel: Input → Output -->
+  <div class="left-panel">
+    <h2>🔹 Input → Output</h2>
+    <div class="boxes">
+      <input id="inputBox" placeholder="Enter text here..." />
+      <textarea id="outputBox" readonly></textarea>
+    </div>
+    <button onclick="processInput()">Process</button>
+  </div>
+
+  <!-- Right Panel: Chat -->
+  <div class="right-panel">
+    <h2>💬 Chat</h2>
+    <div id="chatBox"></div>
+    <input id="chatInput" placeholder="Type your message..." />
+    <button onclick="sendMessage()">Send</button>
+  </div>
+
+</div>
+
+<script>
+function processInput() {
+  const input = document.getElementById("inputBox").value;
+  const output = "Processed: " + input.toUpperCase(); // fake processing
+  document.getElementById("outputBox").value = output;
+}
+
+function sendMessage() {
+  const input = document.getElementById("chatInput");
+  const msg = input.value.trim();
+  if (!msg) return;
+
+  const chatBox = document.getElementById("chatBox");
+
+  // Show user message
+  const userDiv = document.createElement("div");
+  userDiv.className = "chat-message user";
+  userDiv.innerHTML = `<b>You:</b> ${msg}`;
+  chatBox.appendChild(userDiv);
+
+  // Fake bot reply
+  const botReply = generateReply(msg);
+  const botDiv = document.createElement("div");
+  botDiv.className = "chat-message bot";
+  botDiv.innerHTML = `<b>Bot:</b> ${botReply}`;
+  chatBox.appendChild(botDiv);
+
+  chatBox.scrollTop = chatBox.scrollHeight;
+  input.value = "";
+}
+
+function generateReply(msg) {
+  if (msg.toLowerCase().includes("hello")) return "Hi there!";
+  if (msg.toLowerCase().includes("help")) return "I can process text or chat with you!";
+  return "You said: " + msg;
+}
+</script>
+
+</body>
+</html>
